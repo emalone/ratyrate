@@ -16,7 +16,7 @@ module Helpers
     cancel_hint  = options[:cancel_hint]  || 'Cancel current rating!'
     cancel_on    = options[:cancel_on]    || image_path('cancel-on.png')
     cancel_off   = options[:cancel_off]   || image_path('cancel-off.png')
-    noRatedMsg   = options[:noRatedMsg]   || 'I\'am readOnly and I haven\'t rated yet!'
+    noRatedMsg   = options[:noRatedMsg]   || 'I\'am read only and I haven\'t rated yet!'
     # round        = options[:round]        || { down: .26, full: .6, up: .76 }
     space        = options[:space]        || false
     single       = options[:single]       || false
@@ -25,18 +25,18 @@ module Helpers
     targetType   = options[:targetType]   || 'hint'
     targetFormat = options[:targetFormat] || '{score}'
     targetScore  = options[:targetScore]  || ''
-    readOnly  = options[:readonly]  || false
+    readOnly  	 = options[:readOnly]  	  || false
 
     disable_after_rate = options[:disable_after_rate] && true
     disable_after_rate = true if disable_after_rate == nil
 
     if disable_after_rate
-      readonly = !(current_user && rateable_obj.can_rate?(current_user, dimension))
+      readOnly = !(current_user && rateable_obj.can_rate?(current_user, dimension))
     else
-      readonly = !current_user || false
+      readOnly = !current_user || false
     end
 
-    if options[:imdb_avg] && readonly
+    if options[:imdb_avg] && readOnly
       content_tag :div, '', :style => "background-image:url('#{image_path('mid-star.png')}');width:61px;height:57px;margin-top:10px;" do
           content_tag :p, avg, :style => "position:relative;font-size:.8rem;text-align:center;line-height:60px;"
       end
@@ -96,7 +96,7 @@ module Helpers
     cancel_hint  = options[:cancel_hint]  || 'Cancel current rating!'
     cancel_on    = options[:cancel_on]    || image_path('cancel-on.png')
     cancel_off   = options[:cancel_off]   || image_path('cancel-off.png')
-    noRatedMsg   = options[:noRatedMsg]   || 'I\'am readOnly and I haven\'t rated yet!'
+    noRatedMsg   = options[:noRatedMsg]   || 'I\'am read only and I haven\'t rated yet!'
     # round        = options[:round]        || { down: .26, full: .6, up: .76 }
     space        = options[:space]        || false
     single       = options[:single]       || false
@@ -105,18 +105,18 @@ module Helpers
     targetType   = options[:targetType]   || 'hint'
     targetFormat = options[:targetFormat] || '{score}'
     targetScore  = options[:targetScore]  || ''
+    readOnly  	 = options[:readOnly]  	  || false
 
     disable_after_rate = options[:disable_after_rate] || false
 
-    readonly=false
     if disable_after_rate
-      readonly = rating_user.present? ? !rateable_obj.can_rate?(rating_user, dimension) : true
+      readOnly = rating_user.present? ? !rateable_obj.can_rate?(rating_user, dimension) : true
     end
 
     content_tag :div, '', "data-dimension" => dimension, :class => "star", "data-rating" => stars,
                 "data-id" => rateable_obj.id, "data-classname" => rateable_obj.class.name,
                 "data-disable-after-rate" => disable_after_rate,
-                "data-readonly" => readonly,
+                "data-readonly" => readOnly,
                 "data-enable-half" => enable_half,
                 "data-half-show" => half_show,
                 "data-star-count" => star,
